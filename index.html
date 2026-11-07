@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday Ginge 🎂</title>
+<meta name="description" content="Leave KMB a birthday message.">
+<meta property="og:title" content="Happy Birthday Ginge 🎂">
+<meta property="og:description" content="Drop a birthday message for KMB. Hype him, roast him, or send vibes.">
+<meta property="og:image" content="assets/avatar.jpg">
+<meta name="theme-color" content="#9146ff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0e10; --panel:#18181b; --panel2:#1f1f23; --line:#2f2f35;
+    --purple:#9146ff; --purple2:#bf94ff; --ginger:#ff7a1a; --ginger2:#ffb066;
+    --text:#efeff1; --muted:#adadb8; --green:#00f593; --red:#eb0400;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter",system-ui,sans-serif}
+  body{background:radial-gradient(900px 420px at 15% -10%,rgba(255,122,26,.16),transparent 70%),
+    radial-gradient(900px 420px at 95% 0%,rgba(145,70,255,.18),transparent 70%),var(--bg)}
+  .wrap{max-width:1100px;margin:0 auto;padding:16px 14px 50px}
+  a{color:inherit}
+
+  /* top nav */
+  .nav{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .logo{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:13px;
+    background:linear-gradient(135deg,var(--ginger),#c4410c);color:#fff;box-shadow:0 0 0 2px var(--purple)}
+  .nav b{font-size:16px}
+  .nav .sp{flex:1}
+  .pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--panel2);color:var(--muted)}
+
+  /* layout */
+  .main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start}
+
+  /* player */
+  .player{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:16/9;display:flex;justify-content:center}
+  .player .blur{position:absolute;inset:-20px;background-size:cover;background-position:center;filter:blur(24px) brightness(.45)}
+  .player video{position:relative;height:100%;width:auto;max-width:100%;object-fit:contain}
+  .live{position:absolute;top:12px;left:12px;background:var(--red);color:#fff;font-weight:800;font-size:12px;padding:3px 8px;border-radius:4px;letter-spacing:.06em}
+  .viewers{position:absolute;top:12px;left:70px;background:rgba(0,0,0,.6);font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px}
+  .viewers::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:6px}
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .confetti i{position:absolute;top:-10px;width:8px;height:12px;opacity:.9;animation:fall linear infinite}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+  /* stream info */
+  .info{display:flex;gap:12px;margin-top:12px;align-items:flex-start}
+  .avatar{flex:none;width:58px;height:58px;border-radius:50%;padding:3px;background:var(--red)}
+  .avatar div{width:100%;height:100%;border-radius:50%;background-size:cover;background-position:center 20%;border:2px solid var(--bg)}
+  .info h1{margin:0;font-size:20px;font-weight:800}
+  .info .title{margin:4px 0 6px;font-size:15px;font-weight:600}
+  .cmd{color:var(--purple2)}
+  .tags{display:flex;gap:6px;flex-wrap:wrap}
+  .tag{font-size:12px;font-weight:600;background:var(--panel2);color:var(--muted);padding:3px 9px;border-radius:999px}
+  .tag.cat{color:var(--purple2)}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:0;cursor:pointer;font:700 14px "Inter";padding:9px 14px;color:#fff;text-decoration:none;border-radius:6px}
+  .btn svg{width:16px;height:16px;fill:currentColor}
+  .btn.twitch{background:var(--purple)}
+  .btn.discord{background:#5865f2}
+  .btn.ghost{background:var(--panel2);color:var(--text)}
+  .btn.ginger{background:var(--ginger);color:#151515}
+  .btn:disabled{opacity:.5;cursor:default}
+
+  /* about panels */
+  .panels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+  .panel{background:var(--panel);border-radius:8px;padding:12px 14px;border-top:3px solid var(--ginger)}
+  .panel:nth-child(2){border-top-color:var(--purple)}
+  .panel:nth-child(3){border-top-color:var(--green)}
+  .panel h3{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  .panel p{margin:0;font-size:14px;line-height:1.45}
+
+  /* wheel */
+  .wheelbox{margin-top:12px;background:var(--panel);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+  .wheelbox .w{font-size:28px;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+  .wheelbox .res{flex:1;font-size:14px;color:var(--muted)}
+  .wheelbox .res b{color:var(--text)}
+
+  /* chat */
+  .chat{background:var(--panel);border-radius:10px;display:flex;flex-direction:column;height:calc(100vh - 80px);min-height:560px;max-height:820px;position:sticky;top:14px;border:1px solid var(--line)}
+  .chathead{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .chathead b{font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+  .chathead span{font-size:12px;color:var(--muted)}
+  .pinned{margin:10px;padding:10px 12px;background:var(--panel2);border-radius:8px;font-size:13px;line-height:1.4;border-left:3px solid var(--ginger)}
+  .pinned small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+  .log{flex:1;overflow-y:auto;padding:4px 6px 8px}
+  .line{padding:6px 8px;border-radius:6px;font-size:14px;line-height:1.45;word-wrap:break-word;position:relative;animation:in .3s ease}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}}
+  .line:hover{background:var(--panel2)}
+  .line .badge{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:4px;font-size:11px;vertical-align:-3px;margin-right:4px}
+  .line[data-v="hype"] .badge{background:rgba(255,122,26,.2)}
+  .line[data-v="roast"] .badge{background:rgba(235,4,0,.22)}
+  .line[data-v="vibes"] .badge{background:rgba(0,245,147,.18)}
+  .line .name{font-weight:800}
+  .line .t{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+  .line .cp{position:absolute;top:5px;right:6px;display:none;background:var(--panel);border:1px solid var(--line);color:var(--muted);font:600 11px "Inter";padding:2px 7px;border-radius:4px;cursor:pointer}
+  .line:hover .cp,.line:focus-within .cp{display:block}
+  .empty{color:var(--muted);text-align:center;font-size:13px;padding:30px 12px}
+
+  .composer{border-top:1px solid var(--line);padding:10px}
+  .composer input,.composer textarea{width:100%;background:var(--panel2);border:2px solid transparent;color:var(--text);font:14px "Inter";padding:9px 10px;border-radius:6px;outline:none}
+  .composer input:focus,.composer textarea:focus{border-color:var(--purple)}
+  .composer textarea{resize:none;height:64px;margin-top:6px}
+  .chips{display:flex;gap:6px;margin-top:6px}
+  .chip{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--muted);padding:6px 4px;cursor:pointer;font:700 12px "Inter";border-radius:6px}
+  .chip[aria-pressed="true"]{border-color:var(--purple);color:var(--text);background:rgba(145,70,255,.18)}
+  .crow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}
+  .note{color:var(--muted);font-size:12px;flex:1}
+  .note.err{color:#ff6b6b}.note.ok{color:var(--green)}
+  .crow .btn{padding:8px 12px;font-size:13px}
+
+  footer{margin-top:26px;color:var(--muted);font-size:12px;text-align:center}
+
+  @media (max-width:900px){
+    .main{grid-template-columns:1fr}
+    .chat{position:static;height:auto;max-height:none;min-height:0}
+    .log{max-height:60vh;min-height:200px}
+    .panels{grid-template-columns:1fr}
+    .crow{flex-wrap:wrap}
+    .crow .note{flex-basis:100%}
+    .crow .btn{flex:1;justify-content:center}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <div class="logo">KMB</div><b>KMBPC</b><span class="pill">Birthday Edition</span>
+    <span class="sp"></span><span class="pill" id="today"></span>
+  </div>
+
+  <div class="main">
+    <div>
+      <div class="player">
+        <div class="blur" style="background-image:url('assets/poster.jpg')"></div>
+        <video src="assets/clip.mp4" poster="assets/poster.jpg" autoplay muted loop playsinline></video>
+        <div class="live">LIVE</div>
+        <div class="viewers" id="viewers">1 birthday boy</div>
+        <div class="confetti" id="confetti"></div>
+      </div>
+
+      <div class="info">
+        <div class="avatar"><div style="background-image:url('assets/avatar.jpg')"></div></div>
+        <div style="flex:1;min-width:0">
+          <h1>KMBPC</h1>
+          <div class="title">🎂 Happy Birthday Ginge - <span class="cmd">!KMB</span> - <span class="cmd">!cake</span> - <span class="cmd">!wheel</span> - <span class="cmd">!clip</span> - <span class="cmd">!addono</span></div>
+          <div class="tags">
+            <span class="tag cat">Just Birthday-ing</span><span class="tag">English</span><span class="tag">Ginger</span><span class="tag">Colonizer</span><span class="tag">Vibes</span>
+          </div>
+          <div class="btns">
+            <a class="btn twitch" href="https://www.twitch.tv/kmbpc" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M4.3 2 3 5.4v13.8h4.7V22h2.6l2.7-2.8h3.8L22 14V2H4.3Zm15.9 11.1-2.9 3h-4.8l-2.6 2.6v-2.6H6V3.8h14.2v9.3Zm-3-6.1v5.3h-1.8V7h1.8Zm-4.8 0v5.3h-1.8V7h1.8Z"/></svg>
+              Follow on Twitch
+            </a>
+            <a class="btn discord" id="discordBtn" href="" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.4 18.4 0 0 0-5.5 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.6.1 18.1a19.9 19.9 0 0 0 6 3l1.3-2.1a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.9-9.7-3.6-13.7ZM8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/></svg>
+              Join the Discord
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="wheelbox">
+        <div class="w" id="wheelIcon">🎡</div>
+        <div class="res" id="wheelRes"><b>!wheel</b> Spin for Ginge's birthday challenge</div>
+        <button class="btn ginger" id="spin" type="button">Spin</button>
+      </div>
+
+      <div class="panels">
+        <div class="panel"><h3>!KMB</h3><p>Kyle. Ginge. KMB. Variety streamer, music lover, professional vibe merchant. One year older today.</p></div>
+        <div class="panel"><h3>!stream</h3><p>Marvel Rivals, sim racing, Sea of Thieves, golf chaos and whatever the wheel lands on. EU servers remain HELL.</p></div>
+        <div class="panel"><h3>!colonizer</h3><p>Has returned 0 artefacts this year. Will be accepting cake as tribute. Raises tea, not prices.</p></div>
+      </div>
+    </div>
+
+    <aside class="chat">
+      <div class="chathead"><b>Birthday Chat</b><span id="count">0 messages</span></div>
+      <div class="pinned"><small>📌 Pinned by mods</small>Drop a birthday message for Ginge 🎂 Hype him up, roast him, or just send vibes. Everything stays on the wall for him.</div>
+      <div class="log" id="log"><div class="empty">Chat's quiet… be the first to wish KMB a happy birthday.</div></div>
+      <form class="composer" id="form">
+        <input id="from" maxlength="30" placeholder="Your name / username" required>
+        <textarea id="text" maxlength="400" placeholder="Send a birthday message" required></textarea>
+        <div class="chips" id="chips">
+          <button type="button" class="chip" data-v="hype" aria-pressed="true">🎉 Hype</button>
+          <button type="button" class="chip" data-v="roast" aria-pressed="false">🔥 Roast</button>
+          <button type="button" class="chip" data-v="vibes" aria-pressed="false">🎵 Vibes</button>
+        </div>
+        <div class="crow">
+          <span class="note" id="status">Connecting to chat…</span>
+          <button type="button" class="btn ghost" id="copyBtn">Copy for Discord</button>
+          <button type="submit" class="btn twitch" id="sendBtn" disabled>Chat</button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+  <footer>Made for KMB by his mates 🎂 · twitch.tv/kmbpc</footer>
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
