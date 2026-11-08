@@ -15,7 +15,7 @@ Messages are stored in [PocketBase](https://pocketbase.io), hosted for free on [
    (PocketHost dashboard → your instance → **FTP**, log in with your PocketHost account), then restart the instance.
    This creates the `messages` collection, its security rules, and a server-side slow mode (2 posts per minute per IP).
    - No FTP? In the admin UI create a **Base collection** `messages` with fields `name` (text, required, max 30),
-     `message` (text, required, max 400), `vibe` (select: hype / roast / vibes, required), `created` (autodate, on create).
+     `message` (text, required, max 5000), `vibe` (select: hype / roast / vibes, required), `created` (autodate, on create).
      API rules: List / View / Create = empty (public), Update / Delete = locked.
 
 ### 2. Config

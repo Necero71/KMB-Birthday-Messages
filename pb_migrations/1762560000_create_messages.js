@@ -15,7 +15,7 @@ migrate((app) => {
     deleteRule: null,
     fields: [
       { name: "name", type: "text", required: true, min: 1, max: 30, pattern: "\\S" },
-      { name: "message", type: "text", required: true, min: 1, max: 400, pattern: "\\S" },
+      { name: "message", type: "text", required: true, min: 1, max: 5000, pattern: "\\S" },
       { name: "vibe", type: "select", required: true, maxSelect: 1, values: ["hype", "roast", "vibes"] },
       { name: "created", type: "autodate", onCreate: true, onUpdate: false },
     ],

@@ -82,7 +82,7 @@
       const el = document.createElement("div"); el.className = "line"; el.dataset.v = v;
       const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = ICON[v]; badge.title = LABEL[v];
       const name = document.createElement("span"); name.className = "name"; name.textContent = String(m.name || "Anonymous").slice(0, 30); name.style.color = colorFor(m.name);
-      const txt = document.createTextNode(": " + String(m.message || "").slice(0, 400));
+      const txt = document.createTextNode(": " + String(m.message || "").slice(0, 5000));
       const t = document.createElement("span"); t.className = "t";
       t.textContent = m.created_at ? new Date(m.created_at).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
       const cp = document.createElement("button"); cp.type = "button"; cp.className = "cp"; cp.textContent = "Copy";
