@@ -5,35 +5,42 @@ Mates leave a message (🎉 Hype, 🔥 Roast or 🎵 Vibes) and it shows up live
 
 ## Setup
 
-### 1. Supabase (free)
-1. Create a project at [supabase.com](https://supabase.com).
-2. **SQL Editor → New query**, paste [`supabase/schema.sql`](supabase/schema.sql), hit **Run**.
-3. **Project Settings → API**: copy the **Project URL** and the **publishable / anon key**.
-   Do **not** use the `service_role` / secret key, because that one would be public on the site.
+Messages are stored in [PocketBase](https://pocketbase.io), hosted for free on [PocketHost](https://pockethost.io).
+
+### 1. PocketBase on PocketHost
+1. Sign up at [pockethost.io](https://pockethost.io) and create an instance, e.g. `ginge` → `https://ginge.pockethost.io`.
+   Use PocketBase **v0.23 or newer** (the schema file uses the newer format; it was tested on v0.40.6).
+2. Open `https://<your-instance>.pockethost.io/_/` and create your admin (superuser) account.
+3. Upload [`pb_migrations/`](pb_migrations) to the instance's `pb_migrations` folder
+   (PocketHost dashboard → your instance → **FTP**, log in with your PocketHost account), then restart the instance.
+   This creates the `messages` collection, its security rules, and a server-side slow mode (2 posts per minute per IP).
+   - No FTP? In the admin UI create a **Base collection** `messages` with fields `name` (text, required, max 30),
+     `message` (text, required, max 400), `vibe` (select: hype / roast / vibes, required), `created` (autodate, on create).
+     API rules: List / View / Create = empty (public), Update / Delete = locked.
 
 ### 2. Config
 Edit [`config.js`](config.js):
 ```js
 window.KMB_CONFIG = {
-  SUPABASE_URL: "https://xxxx.supabase.co",
-  SUPABASE_KEY: "sb_publishable_xxx",
+  POCKETBASE_URL: "https://ginge.pockethost.io",
   DISCORD_INVITE: "https://discord.gg/xxxx"
 };
 ```
+The URL is safe to be public: what visitors can do is controlled by the collection's API rules on the server.
 
 ### 3. GitHub Pages
 Repo **Settings → Pages → Source: Deploy from a branch → `main` / root → Save**.
 The site goes live at `https://necero71.github.io/KMB-Birthday-Messages/` after a minute or so.
 
 ## Moderating
-Delete spam or anything dodgy in Supabase → **Table Editor → messages**.
-The page can only add messages, never edit or delete them. It also has a 30-second slow mode per browser.
+Delete spam or anything dodgy in the PocketBase admin (`https://<your-instance>.pockethost.io/_/` → **messages**).
+The page can only add messages, never edit or delete them. Slow mode is 30 seconds per browser, plus 2 posts per minute per IP on the server.
 
 ## Files
 | File | What it is |
 |---|---|
 | `index.html` | Page layout + styles |
-| `app.js` | Chat, !wheel, Copy for Discord, Supabase live updates |
-| `config.js` | Your Supabase + Discord settings |
-| `supabase/schema.sql` | Table, security rules, realtime |
+| `app.js` | Chat, !wheel, Copy for Discord, PocketBase live updates |
+| `config.js` | Your PocketBase URL + Discord settings |
+| `pb_migrations/` | `messages` collection, security rules, rate limit |
 | `assets/` | Stream clip, poster, avatar |

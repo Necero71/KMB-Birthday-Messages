@@ -5,7 +5,7 @@
   const ICON = { hype: "🎉", roast: "🔥", vibes: "🎵" };
   const COLORS = ["#ff7a1a","#bf94ff","#00f593","#1e90ff","#ff4f9a","#ffd23f","#3cdfff","#ff6b6b","#9ef01a","#f4a261"];
   const COOLDOWN_MS = 30000;
-  let vibe = "hype", sb = null, msgs = [];
+  let vibe = "hype", pb = null, msgs = [];
 
   // ---------- static bits ----------
   $("today").textContent = new Date().toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
@@ -106,7 +106,7 @@
 
   $("form").addEventListener("submit", async e => {
     e.preventDefault();
-    if (!sb) return;
+    if (!pb) return;
     const name = $("from").value.trim(), message = $("text").value.trim();
     if (!name || !message) { setStatus("Need a name and a message.", "err"); return; }
     let last = 0; try { last = +localStorage.getItem("ginge_last") || 0; } catch (e) {}
@@ -114,36 +114,47 @@
     if (wait > 0) { setStatus(`Slow mode: wait ${Math.ceil(wait / 1000)}s.`, "err"); return; }
     try { localStorage.setItem("ginge_from", name); } catch (e) {}
     $("sendBtn").disabled = true; setStatus("Sending…");
-    const { data, error } = await sb.from("messages").insert({ name, message, vibe }).select().single();
+    let data = null;
+    try { data = toMsg(await pb.collection("messages").create({ name, message, vibe })); }
+    catch (err) {
+      $("sendBtn").disabled = false;
+      const slow = err && err.status === 429;
+      setStatus(slow ? "Slow mode: too many messages, wait a minute." : "Couldn't send. Try again, or use Copy for Discord.", "err");
+      console.error(err); return;
+    }
     $("sendBtn").disabled = false;
-    if (error) { setStatus("Couldn't send. Try again, or use Copy for Discord.", "err"); console.error(error); return; }
     try { localStorage.setItem("ginge_last", String(Date.now())); } catch (e) {}
     $("text").value = "";
-    if (data && !msgs.some(m => m.id === data.id)) { msgs.push(data); render(); }
+    add(data);
     $("log").scrollTop = $("log").scrollHeight;
     setStatus("Sent! 🎉", "ok");
   });
 
-  // ---------- supabase ----------
+  // ---------- pocketbase ----------
+  // PocketBase records use "created"; the renderer expects "created_at".
+  function toMsg(r) { return { id: r.id, name: r.name, message: r.message, vibe: r.vibe, created_at: r.created }; }
+  function add(m) { if (m && !msgs.some(x => x.id === m.id)) { msgs.push(m); render(); } }
+
   async function connect() {
-    if (!CFG.SUPABASE_URL || !CFG.SUPABASE_KEY || !window.supabase) {
+    if (!CFG.POCKETBASE_URL || !window.PocketBase) {
       setStatus("Chat not connected yet. Use Copy for Discord for now.");
       return;
     }
-    sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY);
-    const { data, error } = await sb.from("messages").select("*").order("created_at", { ascending: true }).limit(500);
-    if (error) { setStatus("Couldn't load chat. Copy for Discord still works.", "err"); console.error(error); return; }
-    msgs = data || [];
+    pb = new window.PocketBase(CFG.POCKETBASE_URL.replace(/\/+$/, ""));
+    pb.autoCancellation(false);
+    try {
+      const res = await pb.collection("messages").getList(1, 500, { sort: "-created" });
+      msgs = res.items.map(toMsg).reverse();
+    } catch (err) {
+      pb = null;
+      setStatus("Couldn't load chat. Copy for Discord still works.", "err"); console.error(err); return;
+    }
     render();
     $("sendBtn").disabled = false;
     setStatus("Connected. Say happy birthday 🎂", "ok");
 
-    sb.channel("kmb-messages")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, payload => {
-        const m = payload.new;
-        if (m && !msgs.some(x => x.id === m.id)) { msgs.push(m); render(); }
-      })
-      .subscribe();
+    pb.collection("messages").subscribe("*", e => { if (e.action === "create") add(toMsg(e.record)); })
+      .catch(err => console.error("Live updates unavailable:", err));
   }
   connect();
 })();
