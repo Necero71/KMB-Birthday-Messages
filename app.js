@@ -115,7 +115,7 @@
     try { localStorage.setItem("ginge_from", name); } catch (e) {}
     $("sendBtn").disabled = true; setStatus("Sending…");
     let data = null;
-    try { data = toMsg(await pb.collection("messages").create({ name, message, vibe })); }
+    try { data = toMsg(await pb.collection("messages").create({ name, message, vibe: LABEL[vibe] })); }
     catch (err) {
       $("sendBtn").disabled = false;
       const slow = err && err.status === 429;
@@ -131,8 +131,8 @@
   });
 
   // ---------- pocketbase ----------
-  // PocketBase records use "created"; the renderer expects "created_at".
-  function toMsg(r) { return { id: r.id, name: r.name, message: r.message, vibe: r.vibe, created_at: r.created }; }
+  // PocketBase stores vibes as "Hype" / "Roast" / "Vibes" and uses "created"; the page uses lowercase vibes and "created_at".
+  function toMsg(r) { return { id: r.id, name: r.name, message: r.message, vibe: String(r.vibe || "").toLowerCase(), created_at: r.created }; }
   function add(m) { if (m && !msgs.some(x => x.id === m.id)) { msgs.push(m); render(); } }
 
   async function connect() {

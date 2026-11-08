@@ -16,7 +16,7 @@ migrate((app) => {
     fields: [
       { name: "name", type: "text", required: true, min: 1, max: 30, pattern: "\\S" },
       { name: "message", type: "text", required: true, min: 1, max: 5000, pattern: "\\S" },
-      { name: "vibe", type: "select", required: true, maxSelect: 1, values: ["hype", "roast", "vibes"] },
+      { name: "vibe", type: "select", required: true, maxSelect: 1, values: ["Hype", "Roast", "Vibes"] },
       { name: "created", type: "autodate", onCreate: true, onUpdate: false },
     ],
     indexes: ["CREATE INDEX idx_messages_created ON messages (created)"],
