@@ -114,6 +114,31 @@
 
   footer{margin-top:26px;color:var(--muted);font-size:12px;text-align:center}
 
+  /* countdown */
+  .countdown{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    background:rgba(14,14,16,.82);backdrop-filter:blur(6px);border:1px solid var(--line);border-left:4px solid var(--ginger);border-radius:8px;padding:10px 14px}
+  .countdown[hidden]{display:none}
+  .badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;z-index:2}
+  .badges .live,.badges .viewers{position:static}
+  .countdown .lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ginger2)}
+  .countdown .lbl small{display:block;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:none;font-size:12px;margin-top:2px}
+  .countdown .units{display:flex;gap:6px;margin-left:auto}
+  .countdown .u{min-width:52px;text-align:center;background:var(--panel2);border-radius:6px;padding:5px 6px}
+  .countdown .u b{display:block;font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
+  .countdown .u span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .countdown.today{border-left-color:var(--green);justify-content:center}
+  .countdown.today .big{font-size:20px;font-weight:900}
+  .live.off{background:#53535f}
+  @media (max-width:560px){
+    .countdown{left:8px;right:8px;bottom:8px;padding:7px 9px;gap:6px}
+    .countdown .lbl{font-size:10px}
+    .countdown .lbl small{display:none}
+    .countdown .u{min-width:38px;padding:3px 4px}
+    .countdown .u b{font-size:16px}
+    .countdown .u span{font-size:8px}
+    .countdown.today .big{font-size:15px}
+  }
+
   @media (max-width:900px){
     .main{grid-template-columns:1fr}
     .chat{position:static;height:auto;max-height:none;min-height:0}
@@ -137,9 +162,17 @@
       <div class="player">
         <div class="blur" style="background-image:url('assets/poster.jpg')"></div>
         <video src="assets/clip.mp4" poster="assets/poster.jpg" autoplay muted loop playsinline></video>
-        <div class="live">LIVE</div>
-        <div class="viewers" id="viewers">1 birthday boy</div>
+        <div class="badges"><div class="live" id="liveBadge">LIVE</div><div class="viewers" id="viewers">1 birthday boy</div></div>
         <div class="confetti" id="confetti"></div>
+        <div class="countdown" id="countdown" hidden>
+          <div class="lbl">🎂 Birthday stream starts in<small id="cdDate"></small></div>
+          <div class="units">
+            <div class="u"><b id="cdD">0</b><span>Days</span></div>
+            <div class="u"><b id="cdH">00</b><span>Hrs</span></div>
+            <div class="u"><b id="cdM">00</b><span>Min</span></div>
+            <div class="u"><b id="cdS">00</b><span>Sec</span></div>
+          </div>
+        </div>
       </div>
 
       <div class="info">

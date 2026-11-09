@@ -11,6 +11,65 @@
   $("today").textContent = new Date().toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
   const dBtn = $("discordBtn");
   if (CFG.DISCORD_INVITE) dBtn.href = CFG.DISCORD_INVITE; else dBtn.style.display = "none";
+
+  // ---------- birthday countdown ----------
+  // CFG.BIRTHDAY = "MM-DD" (e.g. "11-21"), counted in CFG.TIMEZONE (default UK time).
+  (() => {
+    const box = $("countdown"), badge = $("liveBadge");
+    const m = /^(\d{1,2})-(\d{1,2})$/.exec(String(CFG.BIRTHDAY || "").trim());
+    if (!m) return;
+    const tz = CFG.TIMEZONE || "Europe/London";
+    const month = +m[1], day = +m[2];
+    const pad = n => String(n).padStart(2, "0");
+
+    // Y/M/D as seen in the birthday timezone
+    function partsIn(date) {
+      const p = {};
+      new Intl.DateTimeFormat("en-GB", { timeZone: tz, year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric", hourCycle: "h23" })
+        .formatToParts(date).forEach(x => p[x.type] = +x.value);
+      return p;
+    }
+    // UTC instant of local midnight y-m-d in tz
+    function midnight(y, mo, d) {
+      let guess = Date.UTC(y, mo - 1, d);
+      for (let i = 0; i < 2; i++) {
+        const p = partsIn(new Date(guess));
+        const asUTC = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+        guess -= asUTC - Date.UTC(y, mo - 1, d);
+      }
+      return guess;
+    }
+
+    const now0 = partsIn(new Date());
+    let year = now0.year;
+    if (Date.now() >= midnight(year, month, day + 1)) year++;   // already past this year's birthday
+    const start = midnight(year, month, day), end = midnight(year, month, day + 1);
+    $("cdDate").textContent = new Date(start).toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" }) + " (UK time)";
+    box.hidden = false;
+
+    let todayMode = false;
+    function tick() {
+      const now = Date.now();
+      if (now >= end) { location.reload(); return; }
+      if (now >= start) {
+        if (!todayMode) {
+          todayMode = true;
+          box.className = "countdown today";
+          box.innerHTML = '<div class="big">🎉 IT\'S HIS BIRTHDAY! Happy birthday KMB 🎂</div>';
+          badge.textContent = "LIVE"; badge.classList.remove("off");
+        }
+        return;
+      }
+      badge.textContent = "STARTING SOON"; badge.classList.add("off");
+      const s = Math.floor((start - now) / 1000);
+      $("cdD").textContent = Math.floor(s / 86400);
+      $("cdH").textContent = pad(Math.floor(s / 3600) % 24);
+      $("cdM").textContent = pad(Math.floor(s / 60) % 60);
+      $("cdS").textContent = pad(s % 60);
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
   try { const s = localStorage.getItem("ginge_from"); if (s) $("from").value = s; } catch (e) {}
 
   // confetti

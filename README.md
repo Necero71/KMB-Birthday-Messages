@@ -44,3 +44,7 @@ The page can only add messages, never edit or delete them. Slow mode is 30 secon
 | `config.js` | Your PocketBase URL + Discord settings |
 | `pb_migrations/` | `messages` collection, security rules, rate limit |
 | `assets/` | Stream clip, poster, avatar |
+
+## Birthday countdown
+Set `BIRTHDAY` in `config.js` as `"MM-DD"` (e.g. `"11-21"`). The countdown sits on the stream player and hits zero at midnight UK time (change `TIMEZONE` if you need to).
+On the day it switches to "IT'S HIS BIRTHDAY!" with the LIVE badge, and after that it rolls over to next year. Leave `BIRTHDAY` blank to hide it.
